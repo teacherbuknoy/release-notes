@@ -40,7 +40,7 @@ async function main() {
 
   console.log('🎡 Generating changelog…')
   const changelog = await generateChangeLog(rawText)
-  console.log(changelog)
+  console.log('✅ Changelog saved as', changelog.file)
 }
 
 main().catch(console.error)

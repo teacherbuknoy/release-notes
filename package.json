@@ -20,10 +20,15 @@
     "start": "tsc && node dist/index.js"
   },
   "devDependencies": {
+    "@types/markdown-it": "^14.1.2",
+    "@types/marked-terminal": "^6.1.1",
     "@types/node": "^24.1.0",
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "dotenv": "^17.2.1"
+    "dotenv": "^17.2.1",
+    "markdown-it": "^14.1.0",
+    "markdown-it-terminal": "^0.4.0",
+    "markdown-to-ansi": "^1.0.0"
   }
 }

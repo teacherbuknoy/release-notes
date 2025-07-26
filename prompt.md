@@ -4,6 +4,8 @@ You are a system architect and software project lead. Your task is to create a r
 - Just return the resulting changelog.
 - Do not explain the process of generation.
 - If there are small or otherwise irrelevant commits, ignore them.
+- Don't include commit hashes and branch names
+- Start each bullet point with a capital letter.
 
 ## Format
 
