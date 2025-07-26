@@ -2,12 +2,14 @@ import fs from 'fs'
 import * as dotenv from 'dotenv';
 import { chunkText, embedDocumentChunks, parseFile } from './lib/index-builder';
 import path from 'path';
-import { generateChangeLog } from './lib/rag-parser';
+import { ChangelogOptions, generateChangeLog } from './lib/rag-parser';
 
 // Entry point for your TypeScript project
 dotenv.config({ debug: false, quiet: true });
 
-const ollamaHost = process.env.OLLAMA_ORIGIN;
+const ollamaHost = process.env.OLLAMA_ORIGIN as string;
+const ollamaModel = process.env.OLLAMA_MODEL as string;
+const ollamaPromptFile = process.env.PROMPT_FILE as string;
 console.log('🖥️  Ollama running at', ollamaHost);
 
 async function main() {
@@ -25,7 +27,18 @@ async function main() {
   console.log('✅ Index saved…')
 
   console.log('🎡 Generating changelog…')
-  const changelog = await generateChangeLog(rawText)
+  const options: ChangelogOptions = {
+    commits: rawText,
+    host: ollamaHost,
+    model: ollamaModel,
+    promptFile: ollamaPromptFile,
+    outfile: 'changelog.md'
+  }
+
+  console.log('\tOllama host:', ollamaHost)
+  console.log('\tModel:', ollamaModel)
+
+  const changelog = await generateChangeLog(options)
   console.log('✅ Changelog saved as', changelog.file)
 }
 

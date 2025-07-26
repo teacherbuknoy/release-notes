@@ -16,10 +16,17 @@ export async function openTextFile(path: fs.PathOrFileDescriptor): Promise<strin
   return data
 }
 
-export async function generateChangeLog(commits: string) {
-  const host = process.env.OLLAMA_ORIGIN as string
-  const model = process.env.OLLAMA_MODEL as string
-  const promptFile = process.env.PROMPT_FILE as string
+export type ChangelogOptions = {
+  commits: string
+  model: string
+  host: string
+  promptFile: fs.PathOrFileDescriptor
+  outfile: fs.PathOrFileDescriptor
+}
+
+export async function generateChangeLog(options: ChangelogOptions) {
+  const { commits, host, model, promptFile, outfile } = options
+  
   const changelogPrompt = await openTextFile(promptFile)
   const prompt = `${changelogPrompt}\n\n${commits}`
   
@@ -33,15 +40,12 @@ export async function generateChangeLog(commits: string) {
     })
   })
 
-  const filepath = 'result-changelog.md'
-  const stream = 'result-stream.md'
-  const fileStream = fs.createWriteStream(filepath)
   const reader = response.body?.getReader()
   const decoder = new TextDecoder()
   let markdown = ''
 
-  fs.writeFileSync(stream, '')
-  console.log(markdownToCli(prompt))
+  fs.writeFileSync(outfile, '')
+  //console.log(markdownToCli(prompt))
   while (true) {
     const { done, value } = (await reader?.read()) ?? { done: true, value: undefined }
     if (done) break
@@ -50,18 +54,17 @@ export async function generateChangeLog(commits: string) {
     
     try {
       const chunkText = JSON.parse(chunk).response
-      fs.appendFileSync(stream, chunkText)
+      fs.appendFileSync(outfile, chunkText)
     } catch (e) {
       console.error('ERROR', chunk)
       throw e
     }
   }
-  fileStream.end()
 
   return { 
     prompt: changelogPrompt,
     response: markdown,
     markdown,
-    file: stream
+    file: outfile
   }
 }
