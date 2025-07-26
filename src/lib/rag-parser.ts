@@ -52,6 +52,7 @@ export async function generateChangeLog(commits: string) {
       fs.appendFileSync(stream, chunkText)
     } catch (e) {
       console.error('ERROR', chunk)
+      throw e
     }
   }
   fileStream.end()
