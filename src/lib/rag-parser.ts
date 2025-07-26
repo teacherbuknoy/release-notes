@@ -17,15 +17,17 @@ export async function openTextFile(path: fs.PathOrFileDescriptor): Promise<strin
 }
 
 export async function generateChangeLog(commits: string) {
-  const changelogPrompt = await openTextFile('prompt.md')
   const host = process.env.OLLAMA_ORIGIN as string
+  const model = process.env.OLLAMA_MODEL as string
+  const promptFile = process.env.PROMPT_FILE as string
+  const changelogPrompt = await openTextFile(promptFile)
   const prompt = `${changelogPrompt}\n\n${commits}`
   
   const response = await fetch(`${host}/api/generate`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      model: 'codellama:7b',
+      model,
       prompt,
       stream: true
     })
@@ -45,7 +47,6 @@ export async function generateChangeLog(commits: string) {
     if (done) break
     const chunk = decoder.decode(value)
     markdown += chunk
-    //fileStream.write(chunk)
     
     try {
       const chunkText = JSON.parse(chunk).response

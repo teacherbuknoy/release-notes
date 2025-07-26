@@ -22,20 +22,6 @@ async function main() {
   console.log('📄 Parsing commits file…', validatedFilepath)
   const rawText = await parseFile(validatedFilepath)
 
-  console.log('✂️  Chunking text…')
-  const chunks = chunkText(rawText)
-
-  console.log('🧠 Generating embeddings…')
-  const embedded = await embedDocumentChunks(chunks)
-
-  console.log('💾 Saving index…')
-  const indexFilepath = 'data/index.json'
-  const dir = path.dirname(indexFilepath)
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true })
-  }
-  fs.writeFileSync(indexFilepath, JSON.stringify(embedded, null, 2))
-
   console.log('✅ Index saved…')
 
   console.log('🎡 Generating changelog…')
