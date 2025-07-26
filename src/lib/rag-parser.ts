@@ -5,3 +5,8 @@ export async function openTextFile(path: fs.PathOrFileDescriptor): Promise<strin
 
   return data
 }
+
+export async function generateChangeLog() {
+  const changelogPrompt = openTextFile('prompt.md')
+  
+}

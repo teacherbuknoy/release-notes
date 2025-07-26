@@ -2,12 +2,13 @@ import fs from 'fs'
 import * as dotenv from 'dotenv';
 import { chunkText, embedDocumentChunks, parseFile } from './lib/index-builder';
 import path from 'path';
+import { generateChangeLog } from './lib/rag-parser';
 
 // Entry point for your TypeScript project
 dotenv.config({ debug: false, quiet: true });
 
 const ollamaHost = process.env.OLLAMA_ORIGIN;
-console.log('OLLAMA_ORIGIN:', ollamaHost);
+console.log('🖥️  Ollama running at', ollamaHost);
 
 async function main() {
   const filepath = process.argv[2]
@@ -21,7 +22,7 @@ async function main() {
   console.log('📄 Parsing file…', validatedFilepath)
   const rawText = await parseFile(validatedFilepath)
 
-  console.log('✂️ Chunking text…')
+  console.log('✂️  Chunking text…')
   const chunks = chunkText(rawText)
 
   console.log('🧠 Generating embeddings…')
@@ -36,6 +37,9 @@ async function main() {
   fs.writeFileSync(indexFilepath, JSON.stringify(embedded, null, 2))
 
   console.log('✅ Index saved…')
+
+  console.log('🎡 Generating changelog…')
+  const changelog = await generateChangeLog()
 }
 
 main().catch(console.error)

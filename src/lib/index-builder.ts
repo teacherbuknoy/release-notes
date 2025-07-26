@@ -6,8 +6,6 @@ dotenv.config({ quiet: true })
 
 export async function parseFile(filePath: string): Promise<string> {
   const ext = path.extname(filePath).toLocaleLowerCase()
-  console.log({ ext })
-
   return await openTextFile(filePath);/* 
   switch (ext.trim()) {
     case '.txt':
@@ -92,10 +90,13 @@ export async function getEmbedding(text: string): Promise<number[]> {
 export async function embedDocumentChunks(chunks: string[]) {
   const allEmbeddings = []
 
+  let index = 1
   for (const chunk of chunks) {
-    console.log(`Embedding chunk: ${chunk.substring(0, 50)}`)
+    console.log(`\tEmbedding chunk (${index}/${chunks.length}, ${chunk.length} chars): ${chunk.substring(0, 50)}`)
     const vector = await getEmbedding(chunk)
     allEmbeddings.push({ chunk, vector })
+
+    index++
   }
 
   return allEmbeddings
