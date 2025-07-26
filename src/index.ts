@@ -10,6 +10,7 @@ dotenv.config({ debug: false, quiet: true });
 const ollamaHost = process.env.OLLAMA_ORIGIN as string;
 const ollamaModel = process.env.OLLAMA_MODEL as string;
 const ollamaPromptFile = process.env.PROMPT_FILE as string;
+const outfile = process.env.OUT_FILE as string;
 console.log('🖥️  Ollama running at', ollamaHost);
 
 async function main() {
@@ -32,7 +33,7 @@ async function main() {
     host: ollamaHost,
     model: ollamaModel,
     promptFile: ollamaPromptFile,
-    outfile: 'changelog.md'
+    outfile
   }
 
   console.log('\tOllama host:', ollamaHost)
