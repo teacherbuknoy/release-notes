@@ -1,2 +1,7 @@
+import * as dotenv from 'dotenv';
+
 // Entry point for your TypeScript project
-console.log('Hello, TypeScript!');
+dotenv.config({ debug: false, quiet: true });
+
+const ollamaHost = process.env.OLLAMA_ORIGIN;
+console.log('OLLAMA_ORIGIN:', ollamaHost);
