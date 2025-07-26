@@ -24,20 +24,49 @@ export type ChangelogOptions = {
   outfile: fs.PathOrFileDescriptor
 }
 
+export type OllamaCompletionRequest = {
+  model: string
+  prompt: string
+  suffix?: string
+  images?: string[]
+  think?: boolean
+  format?: 'json' | string
+  options?: {
+    num_ctx?: number,
+    repeat_last_n?: number,
+    repeat_penalty?: number,
+    temperature?: number,
+    seed?: number,
+    stop?: string,
+    num_predict?: number,
+    top_k?: number,
+    top_p?: number,
+    min_p?: number
+  }
+  system?: string
+  template?: string
+  stream?: boolean
+  raw?: boolean
+  keep_alive?: string
+}
+
 export async function generateChangeLog(options: ChangelogOptions) {
   const { commits, host, model, promptFile, outfile } = options
-  
+
   const changelogPrompt = await openTextFile(promptFile)
   const prompt = `${changelogPrompt}\n\n${commits}`
-  
+  const body: OllamaCompletionRequest = {
+    model,
+    prompt,
+    stream: false,
+    think: false,
+    raw: false
+  }
+
   const response = await fetch(`${host}/api/generate`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model,
-      prompt,
-      stream: true
-    })
+    body: JSON.stringify(body)
   })
 
   const reader = response.body?.getReader()
@@ -51,7 +80,7 @@ export async function generateChangeLog(options: ChangelogOptions) {
     if (done) break
     const chunk = decoder.decode(value)
     markdown += chunk
-    
+
     try {
       const chunkText = JSON.parse(chunk).response
       fs.appendFileSync(outfile, chunkText)
@@ -61,7 +90,7 @@ export async function generateChangeLog(options: ChangelogOptions) {
     }
   }
 
-  return { 
+  return {
     prompt: changelogPrompt,
     response: markdown,
     markdown,
