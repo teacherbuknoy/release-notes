@@ -58,7 +58,7 @@ export async function generateChangeLog(options: ChangelogOptions) {
   const body: OllamaCompletionRequest = {
     model,
     prompt,
-    stream: false,
+    stream: true,
     think: false,
     raw: false
   }
