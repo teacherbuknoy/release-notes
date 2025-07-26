@@ -19,7 +19,7 @@ async function main() {
   }
 
   const validatedFilepath = filepath.replaceAll('^', '')
-  console.log('📄 Parsing file…', validatedFilepath)
+  console.log('📄 Parsing commits file…', validatedFilepath)
   const rawText = await parseFile(validatedFilepath)
 
   console.log('✂️  Chunking text…')
@@ -39,7 +39,8 @@ async function main() {
   console.log('✅ Index saved…')
 
   console.log('🎡 Generating changelog…')
-  const changelog = await generateChangeLog()
+  const changelog = await generateChangeLog(rawText)
+  console.log(changelog)
 }
 
 main().catch(console.error)
