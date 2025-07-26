@@ -1,0 +1,26 @@
+{
+  "name": "release-notes",
+  "version": "1.0.0",
+  "description": "Feed your commits into Ollama and generate a changelog/release note.",
+  "homepage": "https://github.com/teacherbuknoy/release-notes#readme",
+  "bugs": {
+    "url": "https://github.com/teacherbuknoy/release-notes/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/teacherbuknoy/release-notes.git"
+  },
+  "license": "MIT",
+  "author": "Francis Rubio <hello@francisrub.io>",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "start": "tsc && node dist/index.js"
+  },
+  "devDependencies": {
+    "@types/node": "^24.1.0",
+    "typescript": "^5.8.3"
+  }
+}
