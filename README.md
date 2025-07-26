@@ -44,6 +44,22 @@ npm start "<path-to-commits.txt>"
    - `OLLAMA_MODEL` - Model name (e.g., `deepcoder:1.5b`)
    - `PROMPT_FILE` - Path to your prompt file (e.g., `prompt.md`)
 
+## How to use
+1. In your project's repo, generate a text file containing the commits of a release. Ideally, this would be a `git tag`, but you may choose to include commits within a date range instead.
+    ```sh
+    # Get commits under a git tag
+    git log --pretty=format:"%h | %an | %ad | %s" --date=short v1.0.0 > commits.txt
+
+    # Get commits within a date range
+    git log --pretty=format:"%h | %an | %ad | %s" --date=short --since="2025-01-01" --until="2025-02-01" > commits.txt
+    ```
+2. Use this text file (in this case, `commits.txt`) and pass it over to `release-notes`
+    ```sh
+    cd ./path/to/repo/release-notes
+    npm start ./path/to/commits.txt
+    ```
+3. Generated release notes will be in the filepath you set for the `OUT_FILE` property in `.env` file.
+
 ## API Reference
 - See `src/lib/rag-parser.ts` for API usage and streaming support.
 
